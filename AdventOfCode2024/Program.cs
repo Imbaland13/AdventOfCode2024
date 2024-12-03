@@ -94,103 +94,134 @@ static void AdventOfCode2(FileStream fs)
     List<string> lines = [];
     bool isSafe = false;
     int counter = 0;
-    for (int i = 0; i < fs.Length; i++) 
-    {
-        string s = sr.ReadLine();
-        if (s != null) 
-        {
-            lines.Add(s);
-        }
-    }
-    //foreach (string line in lines) 
-    //{
-    //    numbers.Add([line]);
-    //}
-    //for (int i = 0; i < lines.Count; i++)
-    //{
-    //    string line = lines[i];
-    //    //List<int> numbers = new List<int>();
-    //    string[] numbersAsString = line.Split(" ");
-    //    int[] numbers = Array.ConvertAll(numbersAsString, int.Parse);
-    //    isSafe = IsAoc2Safe(numbers);
-    //    foreach(int l in numbers) Console.Write(l + " ");
-    //    Console.WriteLine();
-    //    if (isSafe) { counter++ ; }
-    //}
-    //TESTDATA
-    bool isSafeTest = false;
-    int counterTest = 0;
+    //TestData
     int[] numbers1 = [7, 6, 4, 2, 1];
     int[] numbers2 = [1, 2, 7, 8, 9];
     int[] numbers3 = [9, 7, 6, 2, 1];
     int[] numbers4 = [1, 3, 2, 4, 5];
     int[] numbers5 = [8, 6, 4, 4, 1];
     int[] numbers6 = [1, 3, 6, 7, 9];
-    int[][] ArrayOfNumbers = [numbers1, numbers2, numbers3, numbers4, numbers5,numbers6];
 
-    //List<int> numbers = new List<int>();
-    foreach (var item in ArrayOfNumbers)
+    for (int i = 0; i < fs.Length; i++)
     {
-        isSafeTest = IsAoc2SafeTest(item);
-    }
-    isSafeTest = IsAoc2SafeTest(ArrayOfNumbers);
-    if (isSafeTest) { counterTest++; }
-    Console.WriteLine(counterTest);
-    }
-    
-static bool IsAoc2Safe(int[] numbers)
-{
-    int counter = 0;
-    for (int i = 0; i < numbers.Length; i++)
-    {
-    if (numbers[i] < numbers[i + 1])
-    {
-        counter++;
-        if (counter == numbers.Length - 1)
+        string s = sr.ReadLine();
+        if (s != null)
         {
-            return true;
+            lines.Add(s);
         }
     }
-    else if (numbers[i]< numbers[i + 1])
+    for (int i = 0; i < lines.Count; i++)
     {
-        counter++;
-        if (counter == numbers.Length - 1)
-        {
-            return true;
-        }
+        //string line = lines[i];
+        ////List<int> numbers = new List<int>();
+        //string[] numbersAsString = line.Split(" ");
+        //int[] numbers = Array.ConvertAll(numbersAsString, int.Parse);
+        //isSafe = IsAoc2Safe(numbers);
+        //foreach (int l in numbers) Console.Write(l + " ");
+        //Console.WriteLine();
+        //if (isSafe) { counter++; }
     }
-    else return false;
-    }
-    return false;
-}
-static bool IsAoc2SafeTest(int[][] numbersArray)
-{
-    for (int i = 0; i < numbersArray.Length; i++)
+    isSafe = IsAoc2Safe(numbers1);
+    if (isSafe) { counter++; Console.WriteLine("numbers1"); }
+    isSafe = IsAoc2Safe(numbers2);
+    if (isSafe) { counter++; Console.WriteLine("numbers2"); }
+    isSafe = IsAoc2Safe(numbers3);
+    if (isSafe) { counter++; Console.WriteLine("numbers3"); }
+    isSafe = IsAoc2Safe(numbers4);
+    if (isSafe) { counter++; Console.WriteLine("numbers4"); }
+    isSafe = IsAoc2Safe(numbers5);
+    if (isSafe) { counter++; Console.WriteLine("numbers5"); }
+    isSafe = IsAoc2Safe(numbers6);
+    if (isSafe) { counter++; Console.WriteLine("numbers6"); }
+    Console.WriteLine(counter);
+
+    static bool IsAoc2Safe(int[] numbers)
     {
         int counter = 0;
-        int [] numbers = numbersArray[i];
-        for (int k = 0; k < numbers.Length - 1; k++)
+        if (numbers[0] < numbers[1])
         {
-            if (numbers[k] < numbers[k + 1])
+            bool damperAvailable = true;
+            for (int i = 0; i < numbers.Length; i++)
             {
-                counter++;
-                if (counter == numbers.Length - 1)
+                if ((numbers[i] < numbers[i + 1] ) && numbers[i] - numbers[i + 1] >= -3)
                 {
-                    return true;
+                    counter++;
+                    if (counter == numbers.Length - 1) return true;
                 }
+                else if((numbers[i] - numbers[i + 1] < -3 || numbers[i] == numbers[i + 1]) && damperAvailable)
+                {
+                    counter++;
+                    damperAvailable = false;
+                    if (counter == numbers.Length - 1) return true;
+                }
+                else return false;
+
             }
-            else if (numbers[k] < numbers[k + 1])
+        }
+        else if (numbers[0] > numbers[1])
+        {
+            bool damperAvailable = true;
+            for (int i = 0; i < numbers.Length - 1; i++)
             {
-                counter++;
-                if (counter == numbers.Length - 1)
+                if (numbers[i] > numbers[i + 1] && numbers[i] - numbers[i + 1] <= 3)
                 {
-                    return true;
+                    counter++;
+                    if (counter == numbers.Length - 1)
+                    {
+                        return true;
+                    }
                 }
+                else if ((numbers[i] - numbers[i + 1] > 3 || numbers[i] == numbers[i+1]) && damperAvailable)
+                {
+                    counter++;
+                    damperAvailable = false;
+                    if (counter == numbers.Length - 1) return true;
+                }
+                else return false;
             }
-            else return false;
         }
         return false;
     }
-    return false;
+    //}
+    //TESTDATA
+    //bool isSafeTest = false;
+    //int counterTest = 0;
+
+    //static bool IsAoc2SafeTest(int[] numbers)
+    //{
+    //        int counter = 0;
+    //        if (numbers[0] < numbers[1])
+    //        {
+    //            for (int i = 0; i < numbers.Length; i++)
+    //        {
+    //            if (numbers[i] < numbers[i + 1] && numbers[i] - numbers[i+1]>=-3)
+    //            {
+    //                counter++;
+    //                if (counter == numbers.Length - 1)
+    //                {
+    //                    return true;
+    //                }
+    //            }
+    //            else return false;
+
+    //        }
+    //        }
+    //        else if (numbers[0] > numbers[1])
+    //        {
+    //            for(int i = 0; i < numbers.Length - 1; i++)
+    //            {
+    //                if (numbers[i] > numbers[i + 1] && numbers[i] - numbers[i+1]<=3)
+    //                {
+    //                    counter++;
+    //                    if (counter == numbers.Length - 1)
+    //                    { 
+    //                        return true;
+    //                    }
+    //                }
+    //            else return false;
+    //            }
+    //        }
+    //        return false;
+    //}
 }
 AdventOfCode2(fileAoc2);
